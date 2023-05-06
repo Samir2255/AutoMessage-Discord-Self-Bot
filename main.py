@@ -6,9 +6,9 @@ intents.messages = True
 
 client = discord.Client(intents=intents)
 
-AUTHORIZED_USER_ID = USERID
+AUTHORIZED_USER_ID = YOUR_USER_ID
 
-auto_message_task = None  # Stores the task for sending auto messages
+auto_message_task = None 
 
 @client.event
 async def on_ready():
@@ -48,9 +48,19 @@ async def set_auto_message(message):
     content_msg = await client.wait_for('message', check=check)
     content = content_msg.content
 
+    # Ask the user for the channel ID where the bot should send messages
+    await message.channel.send("Please enter the channel ID where the bot should send messages:")
+    channel_id_msg = await client.wait_for('message', check=check)
+    channel_id = int(channel_id_msg.content)
+
+    target_channel = client.get_channel(channel_id)
+    if target_channel is None:
+        await message.channel.send(f"Invalid channel ID. Please make sure the bot has access to the specified channel.")
+        return
+
     # Schedule the auto message loop
-    await message.channel.send(f"Auto message set. I will send '{content}' every {delay} minute(s).")
-    auto_message_task = asyncio.create_task(send_auto_messages(message.channel, content, delay))
+    await message.channel.send(f"Auto message set. I will send '{content}' every {delay} minute(s) to channel {target_channel.mention}.")
+    auto_message_task = asyncio.create_task(send_auto_messages(target_channel, content, delay))
 
 async def send_auto_messages(channel, content, delay):
     while True:
@@ -72,5 +82,5 @@ async def stop_auto_message(message):
 
     await message.channel.send("Auto message stopped.")
 
-TOKEN = 'your_token_here'
+TOKEN = 'token'
 client.run(TOKEN, bot=False)
