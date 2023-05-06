@@ -6,7 +6,7 @@ intents.messages = True
 
 client = discord.Client(intents=intents)
 
-AUTHORIZED_USER_ID = 1013629940782088213
+AUTHORIZED_USER_ID = USERID
 
 auto_message_task = None  # Stores the task for sending auto messages
 
