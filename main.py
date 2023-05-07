@@ -103,11 +103,12 @@ async def stop_auto_message(message):
     await message.channel.send("Invalid command. Please specify the auto message number to stop (e.g., 'stop 1', 'stop all').")
 
 async def process_command(message):
-    command = message.content.lower()
+    if message.author.id == AUTHORIZED_USER_ID:
+        command = message.content.lower()
 
-    if command in config:
-        response = config[command]
-        await message.channel.send(response)
+        if command in config:
+            response = config[command]
+            await message.channel.send(response)
 
 TOKEN = 'YOUR_TOKEN'
 client.run(TOKEN, bot=False)
