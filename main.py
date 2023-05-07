@@ -22,17 +22,16 @@ async def on_ready():
 @client.event
 async def on_message(message):
     if message.content.startswith('!set_auto_message'):
-        if message.author.id == AUTHORIZED_USER_ID:
-            await set_auto_message(message)
-        else:
-            await message.channel.send("Not authorized to use this command.")
+        await set_auto_message(message)
     elif message.content.startswith('stop'):
-        if message.author.id == AUTHORIZED_USER_ID:
-            await stop_auto_message(message)
+        await stop_auto_message(message)
     else:
         await process_command(message)
 
 async def set_auto_message(message):
+    if message.author.id != AUTHORIZED_USER_ID:
+        return
+
     if len(auto_message_tasks) >= MAX_AUTO_MESSAGES:
         await message.channel.send(f"You have reached the maximum limit of {MAX_AUTO_MESSAGES} auto messages.")
         return
@@ -72,6 +71,8 @@ async def send_auto_messages(channel, content, delay):
             break
 
 async def stop_auto_message(message):
+    if message.author.id != AUTHORIZED_USER_ID:
+        return
     global auto_message_tasks
 
     command_parts = message.content.split()
@@ -110,5 +111,5 @@ async def process_command(message):
             response = config[command]
             await message.channel.send(response)
 
-TOKEN = 'YOUR_TOKEN'
+TOKEN = 'YOUR TOKEN'
 client.run(TOKEN, bot=False)
