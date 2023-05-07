@@ -6,6 +6,7 @@ Features:
 - Set an automated message to be sent at a specified interval.
 - Stop the automated messages anytime.
 - Authorization for using the Self-Bot limited to a specific user ID.
+- Customizable responses using the `config.json` file.
 
 Prerequisites:
 - Python 3.7 or higher
@@ -17,6 +18,7 @@ Installation:
    ```pip install discord.py==1.7.3 asyncio==3.4.3```
 3. Replace 'your_token_here' in the main.py file with your Discord Self-Bot token.
 4. Set the AUTHORIZED_USER_ID variable in the main.py file to the authorized user's ID.
+5. Rename the `config-example.json` file to `config.json`
 
 Usage:
 1. Run the Self-Bot script using the following command:
