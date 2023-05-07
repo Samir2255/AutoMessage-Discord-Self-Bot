@@ -9,8 +9,8 @@ client = discord.Client(intents=intents)
 
 AUTHORIZED_USER_ID = YOUR_USER_ID
 
-auto_message_tasks = []  
-MAX_AUTO_MESSAGES = 3  
+auto_message_tasks = []
+MAX_AUTO_MESSAGES = 3
 
 with open('config.json', 'r') as config_file:
     config = json.load(config_file)
@@ -65,8 +65,11 @@ async def set_auto_message(message):
 
 async def send_auto_messages(channel, content, delay):
     while True:
-        await asyncio.sleep(delay)
-        await channel.send(content)
+        try:
+            await asyncio.sleep(delay)
+            await channel.send(content)
+        except asyncio.CancelledError:
+            break
 
 async def stop_auto_message(message):
     global auto_message_tasks
@@ -92,11 +95,7 @@ async def stop_auto_message(message):
         task = auto_message_tasks[index]
         task.cancel()
         auto_message_tasks.remove(task)
-        await message.channel.send(f"Auto message {index + 1} stopped.")
-        return
-
-        task = auto_message_tasks[index]
-        task.cancel()
+        await task.cancel()
         auto_message_tasks.remove(task)
         await message.channel.send(f"Auto message {index + 1} stopped.")
         return
