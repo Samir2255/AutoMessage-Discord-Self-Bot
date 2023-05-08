@@ -96,8 +96,6 @@ async def stop_auto_message(message):
         task = auto_message_tasks[index]
         task.cancel()
         auto_message_tasks.remove(task)
-        await task.cancel()
-        auto_message_tasks.remove(task)
         await message.channel.send(f"Auto message {index + 1} stopped.")
         return
 
@@ -111,5 +109,5 @@ async def process_command(message):
             response = config[command]
             await message.channel.send(response)
 
-TOKEN = 'YOUR TOKEN'
+TOKEN = 'YOUR_TOKEN'
 client.run(TOKEN, bot=False)
